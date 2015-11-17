@@ -17,12 +17,20 @@ from __future__ import print_function
 from oslo_config import cfg
 from twitter_streaming import TwitterStreaming
 from tweet_search import TweetSearch
+import json
+import tools
 
 
 # Main function here
 if __name__ == "__main__":
-    # ts = TwitterStreaming()
+    # Live tweet this code block gets tweets from your twitter page
+    # Twitter streaming
+    ts = TwitterStreaming()
     # ts.print_tweet()
+    # this block searches among all tweets by hashtag or key words or users
     tweet = TweetSearch()
-    # tweet.hashtag_search("#PrayForParis")
-    tweet.get_trends(1)
+    print(json.dumps(tweet.get_trends_one_location(), indent=4))
+    # this one is too much for the API to handle
+    # I am afread that this one can't be done beacause of Rate limits in version 1.1 of the API
+    # print(json.dumps(tweet.get_trends_all_locations(), indent=4))
+    print(tweet.hashtag_search('#PSYSomewhereDownTheRoad'))

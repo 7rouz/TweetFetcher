@@ -25,9 +25,10 @@ from twitter import Twitter, OAuth, TwitterHTTPError, TwitterStream
 
 
 class TwitterStreaming():
+
     def connect(self):
         # Initiate the connection to Twitter Streaming API
-        return TwitterStream(auth= tools.setup())
+        return TwitterStream(auth=tools.setup())
 
     def get_data(self, twitter_stream):
         # Get a sample of the public data following through Twitter
@@ -36,25 +37,24 @@ class TwitterStreaming():
     def tweet_print(self, tweet):
         # print ("tweet from %s at %s saying :", tweet["user"]["id"], tweet["created_at"])
         try:
-            print (tweet["text"])  
+            print(tweet["text"])
         except KeyError:
-            print ("Tweet doesn't have a text field")
+            print("Tweet doesn't have a text field")
 
     def print_tweet(self):
-        # Print each tweet in the stream to the screen 
-        # Here we set it to stop after getting 1000 tweets. 
-        # You don't have to set it to stop, but can continue running 
-        # the Twitter API to collect data for days or even longer. 
+        # Print each tweet in the stream to the screen
+        # Here we set it to stop after getting 1000 tweets.
+        # You don't have to set it to stop, but can continue running
+        # the Twitter API to collect data for days or even longer.
         tweet_count = 1000
         for tweet in self.get_data(self.connect()):
             tweet_count -= 1
-            # Twitter Python Tool wraps the data returned by Twitter 
-            # as a TwitterDictResponse object.
-            # We convert it back to the JSON format to print/score
-            print (json.dumps(tweet, indent=4))
-            self.tweet_print(tweet)
-            # The command below will do pretty printing for JSON data, try it out
-            # print json.dumps(tweet, indent=4)
-               
+
+            # uncomment the line below to print all tweet's fields in Jason form
+            # print(json.dumps(tweet, indent=4))
+
+            # print only some fields of the tweet
+            tools.tweet_minimal_print(tweet)
+
             if tweet_count <= 0:
                 break

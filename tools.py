@@ -15,10 +15,29 @@
 
 from __future__ import print_function
 from oslo_config import cfg
+import tweepy
 from twitter import Twitter, OAuth, TwitterHTTPError, TwitterStream
 
 
+def tweepy_setup():
+    credentials = credential_cfg()
+    auth = tweepy.OAuthHandler(credentials['CONSUMER_KEY'],
+                               credentials['CONSUMER_SECRET'])
+    auth.set_access_token(credentials['ACCESS_TOKEN'],
+                          credentials['ACCESS_SECRET'])
+    api = tweepy.API(auth)
+    return api
+
+
 def setup():
+    credentials = credential_cfg()
+    return OAuth(credentials['ACCESS_TOKEN'],
+                 credentials['ACCESS_SECRET'],
+                 credentials['CONSUMER_KEY'],
+                 credentials['CONSUMER_SECRET'])
+
+
+def credential_cfg():
     # Config setup
     opt_group = cfg.OptGroup(name='twitter',
                              title='Twitter API credentials')
@@ -43,10 +62,13 @@ def setup():
     CONSUMER_KEY = CONF.twitter.api_key
     CONSUMER_SECRET = CONF.twitter.api_secret
 
-    return OAuth(ACCESS_TOKEN, ACCESS_SECRET, CONSUMER_KEY, CONSUMER_SECRET)
+    return {'ACCESS_TOKEN': CONF.twitter.access_token,
+            'ACCESS_SECRET': CONF.twitter.access_token_secret,
+            'CONSUMER_KEY': CONF.twitter.api_key,
+            'CONSUMER_SECRET': CONF.twitter.api_secret}
 
 
-def location_setup():
+def location_cfg():
     # Config setup
     opt_group = cfg.OptGroup(name='key_words',
                              title='location and locations list')

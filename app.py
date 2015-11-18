@@ -33,4 +33,4 @@ if __name__ == "__main__":
     # this one is too much for the API to handle
     # I am afread that this one can't be done beacause of Rate limits in version 1.1 of the API
     # print(json.dumps(tweet.get_trends_all_locations(), indent=4))
-    print(tweet.hashtag_search('#PSYSomewhereDownTheRoad'))
+    tweet.hashtag_search('#OMG')

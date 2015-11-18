@@ -18,6 +18,8 @@
 import tools
 import json
 from twitter import Twitter, OAuth, TwitterHTTPError, TwitterStream
+import tweepy
+import datetime
 
 
 class TweetSearch():
@@ -28,7 +30,11 @@ class TweetSearch():
 
     def hashtag_search(self, hashtag):
         # Search for latest tweets about hastag
-        self.connect().search.tweets(q=hashtag, result_type='popular')
+        api = tools.tweepy_setup()
+        i = datetime.datetime.now()
+
+        for tweet in tweepy.Cursor(api.search, q=hashtag, count=1, lang="en", since_id=int(i.year) - int(i.month) - int(i.day)).items():
+            print tweet.created_at, tweet.text
 
     def location_check(self, location_name):
         # Get all the locations where Twitter provides trends service
@@ -66,7 +72,7 @@ class TweetSearch():
         return trends_list
 
     def get_trends_one_location(self):
-        location = tools.location_setup()["location"]
+        location = tools.location_cfg()["location"]
         return self.get_trends(location)
 
     def get_trends_all_locations(self):
